@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEZERANO ALPHA Login</title>
+
+    <style>
+        *{
+            margin: 0;
+            text-decoration: none;
+        }
+        body{
+            background-color: aliceblue;
+        }
+        header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: navy;
+            color: white;
+            padding: 15px;
+        }
+        ul{
+            display: flex;
+            gap: 15px;
+            list-style-type: none;
+        }
+        .form1{
+            height: auto;
+            width: 500px;
+            border: 2px solid navy;
+            padding: 20px;
+            margin: 50px auto;
+            background: white;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .lqbels{
+           font-weight: bold;
+           font-family: Gill Sans, Calibri, Trebuchet MS, sans-serif;
+        }
+        .input1, select{
+            border:2px solid navy;
+            border-radius: 20px;
+            font-size: large;
+            padding: 8px;
+        }
+        .getstarted{
+            padding: 15px;
+            border: 2px dotted navy;
+            border-radius: 20px;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+        }
+        .error{
+            color: red;
+            font-size: small;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h4>SEZERANO ALPHA Innovate company</h4>
+    <nav>
+        <ul>
+            <li><a href="#" style="color:white;">home</a></li>
+            <li><a href="#" style="color:white;">about</a></li>
+            <li><a href="#" style="color:white;">service</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="form1">
+    <form id="loginForm">
+
+        <label class="lqbels">Username</label>
+        <input type="text" id="username" class="input1">
+
+        <label class="lqbels">Registration ID</label>
+        <input type="text" id="regid" class="input1">
+
+        <label class="lqbels">Branch</label>
+        <input type="text" id="branch" class="input1">
+
+        <label class="lqbels">Email Address</label>
+        <input type="email" id="email" class="input1">
+        <span id="emailError" class="error"></span>
+
+        <label class="lqbels">Password</label>
+        <input type="password" id="password" class="input1">
+
+        <!-- NEW FEATURE: DROPDOWN -->
+        <label class="lqbels">Select Role</label>
+        <select id="role">
+            <option value="">-- Select Role --</option>
+            <option value="student">Student</option>
+            <option value="staff">Staff</option>
+        </select>
+
+        <!-- NEW FEATURE: DYNAMIC FIELD -->
+        <div id="studentBox" style="display:none;">
+            <label class="lqbels">Student Number</label>
+            <input type="text" class="input1">
+        </div>
+
+        <button class="getstarted" type="submit">GET In</button>
+
+        <center><p><a href="#">forgot password?</a></p></center>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const email = document.getElementById("email");
+    const emailError = document.getElementById("emailError");
+    const role = document.getElementById("role");
+    const studentBox = document.getElementById("studentBox");
+
+    // Dynamic field logic
+    role.addEventListener("change", function () {
+        if (this.value === "student") {
+            studentBox.style.display = "block";
+        } else {
+            studentBox.style.display = "none";
+        }
+    });
+
+    // Form validation
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email.value)) {
+            emailError.textContent = "Invalid email format";
+            return;
+        } else {
+            emailError.textContent = "";
+        }
+
+        alert("Form submitted successfully!");
+        form.reset();
+        studentBox.style.display = "none";
+    });
+</script>
+
+</body>
+</html>
