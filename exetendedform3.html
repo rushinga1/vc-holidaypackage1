@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEZERANO ALPHA Innovate Form</title>
+
+    <style>
+        *{
+            margin: 0;
+            text-decoration: none;
+        }
+        body{
+            background-color: aliceblue;
+        }
+        header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: navy;
+            color: white;
+            padding: 15px;
+        }
+        ul{
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+        .form1{
+            width: 500px;
+            border: 2px solid navy;
+            padding: 20px;
+            margin: 40px auto;
+            background: white;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .lqbels{
+            font-weight: bold;
+            font-family: Gill Sans, Calibri, Trebuchet MS, sans-serif;
+        }
+        .input1, select{
+            border:2px solid navy;
+            border-radius: 20px;
+            font-size: medium;
+            padding: 8px;
+        }
+        .getstarted{
+            padding: 12px;
+            border-radius: 20px;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+        }
+        .error{
+            color: red;
+            font-size: small;
+        }
+        .records{
+            width: 500px;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border: 2px solid navy;
+        }
+        .record{
+            border-bottom: 1px solid #ccc;
+            padding: 6px 0;
+        }
+        .clearBtn{
+            margin-top: 10px;
+            padding: 8px;
+            background: crimson;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h4>SEZERANO ALPHA Innovate company</h4>
+    <nav>
+        <ul>
+            <li><a href="#" style="color:white;">home</a></li>
+            <li><a href="#" style="color:white;">about</a></li>
+            <li><a href="#" style="color:white;">service</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="form1">
+    <form id="loginForm">
+
+        <label class="lqbels">Username</label>
+        <input type="text" id="username" class="input1">
+
+        <label class="lqbels">Registration ID</label>
+        <input type="text" id="regid" class="input1">
+
+        <label class="lqbels">Branch</label>
+        <input type="text" id="branch" class="input1">
+
+        <label class="lqbels">Email Address</label>
+        <input type="email" id="email" class="input1">
+        <span id="emailError" class="error"></span>
+
+        <label class="lqbels">Password</label>
+        <input type="password" id="password" class="input1">
+
+        <!-- Dropdown -->
+        <label class="lqbels">Select Role</label>
+        <select id="role">
+            <option value="">-- Select Role --</option>
+            <option value="student">Student</option>
+            <option value="staff">Staff</option>
+        </select>
+
+        <!-- Dynamic Field -->
+        <div id="studentBox" style="display:none;">
+            <label class="lqbels">Student Number</label>
+            <input type="text" id="studentNumber" class="input1">
+        </div>
+
+        <button class="getstarted" type="submit">GET In</button>
+    </form>
+</div>
+
+<!-- Stored Data Display -->
+<div class="records">
+    <h4>Submitted Records</h4>
+    <div id="recordList"></div>
+    <button class="clearBtn" onclick="clearStorage()">Clear Stored Data</button>
+</div>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const role = document.getElementById("role");
+    const studentBox = document.getElementById("studentBox");
+    const recordList = document.getElementById("recordList");
+    const email = document.getElementById("email");
+    const emailError = document.getElementById("emailError");
+
+    // Show/Hide dynamic field
+    role.addEventListener("change", function () {
+        studentBox.style.display = this.value === "student" ? "block" : "none";
+    });
+
+    // Load saved data on page load
+    window.onload = function () {
+        displayRecords();
+    };
+
+    // Form submission simulation
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email.value)) {
+            emailError.textContent = "Invalid email format";
+            return;
+        }
+        emailError.textContent = "";
+
+        let userData = {
+            username: username.value,
+            regid: regid.value,
+            branch: branch.value,
+            email: email.value,
+            role: role.value,
+            studentNumber: studentNumber.value || "N/A"
+        };
+
+        let records = JSON.parse(localStorage.getItem("sezeranoData")) || [];
+        records.push(userData);
+        localStorage.setItem("sezeranoData", JSON.stringify(records));
+
+        alert("Form submitted and data stored locally!");
+        form.reset();
+        studentBox.style.display = "none";
+        displayRecords();
+    });
+
+    // Display stored data
+    function displayRecords() {
+        let records = JSON.parse(localStorage.getItem("sezeranoData")) || [];
+        recordList.innerHTML = "";
+
+        records.forEach((item, index) => {
+            recordList.innerHTML += `
+                <div class="record">
+                    ${index + 1}. ${item.username} (${item.role}) - ${item.email}
+                </div>
+            `;
+        });
+    }
+
+    // Clear localStorage
+    function clearStorage() {
+        localStorage.removeItem("sezeranoData");
+        displayRecords();
+        alert("Stored data cleared");
+    }
+</script>
+
+</body>
+</html>
